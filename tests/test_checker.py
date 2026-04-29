@@ -2,7 +2,6 @@ from pathlib import Path
 
 from lrucheck.checker import check_source
 
-
 EXAMPLES_DIR = Path(__file__).parent / "examples"
 
 

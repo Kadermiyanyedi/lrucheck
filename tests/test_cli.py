@@ -4,7 +4,6 @@ import pytest
 
 from lrucheck.cli import main
 
-
 CLEAN_SOURCE = "def f(x):\n    return x\n"
 
 LEAKY_SOURCE = (

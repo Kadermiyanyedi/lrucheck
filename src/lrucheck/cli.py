@@ -9,7 +9,6 @@ from lrucheck import __version__
 from lrucheck.checker import check_source
 from lrucheck.rules import RuleError
 
-
 EXIT_OK = 0
 EXIT_FOUND_ISSUES = 1
 EXIT_PARSE_ERROR = 2
@@ -42,7 +41,10 @@ def main(argv: list[str] | None = None) -> int:
         try:
             rule_errors.extend(check_source(source, str(path)))
         except SyntaxError as error:
-            print(f"{path}:{error.lineno}:{error.offset}: syntax error: {error.msg}", file=sys.stderr)
+            print(
+                f"{path}:{error.lineno}:{error.offset}: syntax error: {error.msg}",
+                file=sys.stderr,
+            )
             parse_failed = True
 
     rule_errors.sort(key=lambda e: (e.path, e.line, e.column, e.rule.code))

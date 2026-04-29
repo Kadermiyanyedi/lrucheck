@@ -5,7 +5,6 @@ from collections.abc import Iterable
 
 from lrucheck.rules import LRU001, LRU002, RuleError
 
-
 CACHE_NAMES = frozenset({"lru_cache", "cache"})
 
 
