@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 from collections.abc import Iterable
 
-from lrucheck.rules import LRU001, LRU002, Diagnostic
+from lrucheck.rules import LRU001, LRU002, RuleError
 
 
 CACHE_NAMES = frozenset({"lru_cache", "cache"})
@@ -12,7 +12,7 @@ CACHE_NAMES = frozenset({"lru_cache", "cache"})
 class Checker(ast.NodeVisitor):
     def __init__(self, path: str) -> None:
         self.path = path
-        self.diagnostics: list[Diagnostic] = []
+        self.rule_errors: list[RuleError] = []
         self._functools_aliases: set[str] = set()
         self._direct_aliases: dict[str, str] = {}
         self._class_depth = 0
@@ -57,10 +57,10 @@ class Checker(ast.NodeVisitor):
             line, col = self._decorator_position(decorator)
 
             if in_class and not skip_self_leak:
-                self.diagnostics.append(Diagnostic(self.path, line, col, LRU001))
+                self.rule_errors.append(RuleError(self.path, line, col, LRU001))
 
             if self._is_unbounded(decorator, cache_name):
-                self.diagnostics.append(Diagnostic(self.path, line, col, LRU002))
+                self.rule_errors.append(RuleError(self.path, line, col, LRU002))
 
     def _has_static_or_class_decorator(self, decorators: Iterable[ast.expr]) -> bool:
         for decorator in decorators:
@@ -109,8 +109,8 @@ class Checker(ast.NodeVisitor):
         return decorator.lineno, decorator.col_offset + 1
 
 
-def check_source(source: str, path: str) -> list[Diagnostic]:
+def check_source(source: str, path: str) -> list[RuleError]:
     tree = ast.parse(source, filename=path)
     checker = Checker(path)
     checker.visit(tree)
-    return checker.diagnostics
+    return checker.rule_errors

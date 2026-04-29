@@ -10,7 +10,7 @@ class Rule:
 
 
 @dataclass(frozen=True)
-class Diagnostic:
+class RuleError:
     path: str
     line: int
     column: int
