@@ -5,6 +5,30 @@ description = "Detect memory-leak patterns in Python's functools.lru_cache usage
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = []
+authors = [
+    { name = "Kadermiyanyedi" },
+]
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["lint", "linter", "lru-cache", "static-analysis", "memory-leak"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+[project.urls]
+Homepage = "https://github.com/Kadermiyanyedi/lrucheck"
+Issues = "https://github.com/Kadermiyanyedi/lrucheck/issues"
+Repository = "https://github.com/Kadermiyanyedi/lrucheck"
 
 [project.scripts]
 lrucheck = "lrucheck.cli:main"
