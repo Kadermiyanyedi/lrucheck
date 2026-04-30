@@ -14,7 +14,7 @@
 - [ ] `--select` / `--ignore` flags to enable or disable rules
 - [ ] `--exclude` flag to skip paths
 - [ ] JSON output mode for editor integrations
-- [ ] Pre-commit hook integration (`.pre-commit-hooks.yaml`)
+- [ ] Provide `.pre-commit-hooks.yaml` so other projects can use lrucheck as a pre-commit hook
 
 ## Release
 

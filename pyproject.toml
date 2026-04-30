@@ -29,8 +29,15 @@ select = ["E", "F", "I", "B", "UP", "SIM"]
 [tool.ruff.lint.per-file-ignores]
 "tests/examples/*.py" = ["F401", "F811", "F821", "B019", "UP033"]
 
+[tool.codespell]
+skip = "uv.lock,.git,.ruff_cache,.pytest_cache,.venv"
+ignore-words-list = "lrucheck,functools,classmethod,staticmethod,pyproject"
+
 [dependency-groups]
 dev = [
     "pytest>=8",
     "ruff>=0.5",
+    "pre-commit>=3",
+    "ty",
+    "codespell>=2",
 ]

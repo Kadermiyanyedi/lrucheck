@@ -141,6 +141,27 @@ uv run pytest
 uv run lrucheck tests/examples/
 ```
 
+### Pre-commit
+
+The project uses [`pre-commit`](https://pre-commit.com/) to run checks before each commit:
+
+- `ruff` for linting and formatting
+- `codespell` for spelling
+- [`ty`](https://github.com/astral-sh/ty) for type checking
+- standard hooks for trailing whitespace, end of file, large files
+
+To set it up once:
+
+```bash
+uv run pre-commit install
+```
+
+After this, the hooks run on every `git commit`. You can also run them on all files at any time:
+
+```bash
+uv run pre-commit run --all-files
+```
+
 ## License
 
 MIT.
