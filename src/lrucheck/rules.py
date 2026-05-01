@@ -1,12 +1,19 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+class Severity(Enum):
+    ERROR = "error"
+    WARNING = "warning"
 
 
 @dataclass(frozen=True)
 class Rule:
     code: str
     message: str
+    severity: Severity = field(default=Severity.ERROR)
 
 
 @dataclass(frozen=True)
@@ -17,7 +24,12 @@ class RuleError:
     rule: Rule
 
     def format(self) -> str:
-        return f"{self.path}:{self.line}:{self.column}: {self.rule.code} {self.rule.message}"
+        prefix = ""
+        if self.rule.severity is Severity.WARNING:
+            prefix = "warning: "
+        return (
+            f"{self.path}:{self.line}:{self.column}: {prefix}{self.rule.code} {self.rule.message}"
+        )
 
 
 LRU001 = Rule(

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from lrucheck import __version__
 from lrucheck.checker import check_source
-from lrucheck.rules import RuleError
+from lrucheck.rules import RuleError, Severity
 
 EXIT_OK = 0
 EXIT_FOUND_ISSUES = 1
@@ -53,7 +53,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if parse_failed:
         return EXIT_PARSE_ERROR
-    if rule_errors:
+    if any(error.rule.severity is Severity.ERROR for error in rule_errors):
         return EXIT_FOUND_ISSUES
     return EXIT_OK
 
