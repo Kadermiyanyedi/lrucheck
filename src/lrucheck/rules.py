@@ -47,3 +47,9 @@ LRU003 = Rule(
     message="`@lru_cache` inside a function makes a new cache on every call and rarely hits",
     severity=Severity.WARNING,
 )
+
+LRU004 = Rule(
+    code="LRU004",
+    message="`@lru_cache` must be below `@staticmethod`, the reverse breaks on Python 3.9",
+    severity=Severity.WARNING,
+)

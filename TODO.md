@@ -5,7 +5,7 @@
 - [x] **LRU001** — `@lru_cache` / `@cache` on a method (instance leak via `self`)
 - [x] **LRU002** — `@lru_cache(maxsize=None)` or `@cache` (no size limit)
 - [x] **LRU003** — `@lru_cache` defined inside a function or closure (a new cache per call, no real hits)
-- [ ] **LRU004** — Wrong decorator order with `@staticmethod`. `@lru_cache` must be the inner decorator and `@staticmethod` must be the outer one. The reverse breaks on Python 3.9 and is non canonical on later versions.
+- [x] **LRU004** — Wrong decorator order with `@staticmethod`. `@lru_cache` must be the inner decorator and `@staticmethod` must be the outer one. The reverse breaks on Python 3.9 and is non canonical on later versions.
 
 ## Features
 

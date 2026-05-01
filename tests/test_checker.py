@@ -63,3 +63,15 @@ def test_lru003_fires_for_cache_decorators_inside_a_function():
         (21, "LRU003"),
         (30, "LRU003"),
     ]
+
+
+def test_lru004_fires_when_lru_cache_is_above_staticmethod():
+    errors, expected_path = errors_in("lru004_patterns.py")
+
+    assert all(error.path == expected_path for error in errors)
+    assert [(error.line, error.rule.code) for error in errors] == [
+        (5, "LRU004"),
+        (12, "LRU002"),
+        (12, "LRU004"),
+        (25, "LRU004"),
+    ]

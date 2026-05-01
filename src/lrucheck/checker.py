@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 from collections.abc import Iterable
 
-from lrucheck.rules import LRU001, LRU002, LRU003, RuleError
+from lrucheck.rules import LRU001, LRU002, LRU003, LRU004, RuleError
 
 CACHE_NAMES = frozenset({"lru_cache", "cache"})
 
@@ -74,11 +74,30 @@ class Checker(ast.NodeVisitor):
             if in_function:
                 self.rule_errors.append(RuleError(self.path, line, col, LRU003))
 
+        self._check_lru004(node.decorator_list)
+
     def _has_static_or_class_decorator(self, decorators: Iterable[ast.expr]) -> bool:
         for decorator in decorators:
             if isinstance(decorator, ast.Name) and decorator.id in {"staticmethod", "classmethod"}:
                 return True
         return False
+
+    def _check_lru004(self, decorators: list[ast.expr]) -> None:
+        cache_index: int | None = None
+        staticmethod_index: int | None = None
+        for index, decorator in enumerate(decorators):
+            if cache_index is None and self._resolve_cache_decorator(decorator) is not None:
+                cache_index = index
+            elif isinstance(decorator, ast.Name) and decorator.id == "staticmethod":
+                staticmethod_index = index
+
+        if (
+            cache_index is not None
+            and staticmethod_index is not None
+            and cache_index < staticmethod_index
+        ):
+            line, col = self._decorator_position(decorators[cache_index])
+            self.rule_errors.append(RuleError(self.path, line, col, LRU004))
 
     def _resolve_cache_decorator(self, decorator: ast.expr) -> str | None:
         target = decorator.func if isinstance(decorator, ast.Call) else decorator
