@@ -3,7 +3,7 @@ from __future__ import annotations
 import ast
 from collections.abc import Iterable
 
-from lrucheck.rules import LRU001, LRU002, RuleError
+from lrucheck.rules import LRU001, LRU002, LRU003, RuleError
 
 CACHE_NAMES = frozenset({"lru_cache", "cache"})
 
@@ -15,6 +15,7 @@ class Checker(ast.NodeVisitor):
         self._functools_aliases: set[str] = set()
         self._direct_aliases: dict[str, str] = {}
         self._class_depth = 0
+        self._function_depth = 0
 
     def visit_Import(self, node: ast.Import) -> None:
         for alias in node.names:
@@ -38,14 +39,23 @@ class Checker(ast.NodeVisitor):
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         self._check_function(node)
-        self.generic_visit(node)
+        self._function_depth += 1
+        try:
+            self.generic_visit(node)
+        finally:
+            self._function_depth -= 1
 
     def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:
         self._check_function(node)
-        self.generic_visit(node)
+        self._function_depth += 1
+        try:
+            self.generic_visit(node)
+        finally:
+            self._function_depth -= 1
 
     def _check_function(self, node: ast.FunctionDef | ast.AsyncFunctionDef) -> None:
         in_class = self._class_depth > 0
+        in_function = self._function_depth > 0
         skip_self_leak = self._has_static_or_class_decorator(node.decorator_list)
 
         for decorator in node.decorator_list:
@@ -60,6 +70,9 @@ class Checker(ast.NodeVisitor):
 
             if self._is_unbounded(decorator, cache_name):
                 self.rule_errors.append(RuleError(self.path, line, col, LRU002))
+
+            if in_function:
+                self.rule_errors.append(RuleError(self.path, line, col, LRU003))
 
     def _has_static_or_class_decorator(self, decorators: Iterable[ast.expr]) -> bool:
         for decorator in decorators:

@@ -15,6 +15,16 @@ LEAKY_SOURCE = (
     "        return x\n"
 )
 
+WARNING_ONLY_SOURCE = (
+    "from functools import lru_cache\n"
+    "\n"
+    "def outer():\n"
+    "    @lru_cache(maxsize=128)\n"
+    "    def inner(x):\n"
+    "        return x\n"
+    "    return inner\n"
+)
+
 
 @pytest.fixture
 def write_py(tmp_path: Path):
@@ -93,6 +103,16 @@ def test_output_is_sorted_by_path_then_line(write_py, tmp_path: Path, capsys):
 
     paths = [line.split(":")[0] for line in output_lines]
     assert paths == sorted(paths)
+
+
+def test_warning_only_file_returns_zero_and_prints_warning_prefix(write_py, capsys):
+    target = write_py("nested.py", WARNING_ONLY_SOURCE)
+
+    exit_code = main([str(target)])
+    captured = capsys.readouterr()
+
+    assert exit_code == 0
+    assert "warning: LRU003" in captured.out
 
 
 def test_version_flag_prints_version_and_exits_zero(capsys):

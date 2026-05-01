@@ -41,3 +41,9 @@ LRU002 = Rule(
     code="LRU002",
     message="`@lru_cache(maxsize=None)` or `@cache` has no size limit and can grow forever",
 )
+
+LRU003 = Rule(
+    code="LRU003",
+    message="`@lru_cache` inside a function makes a new cache on every call and rarely hits",
+    severity=Severity.WARNING,
+)

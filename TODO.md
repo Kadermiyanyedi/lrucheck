@@ -4,7 +4,7 @@
 
 - [x] **LRU001** — `@lru_cache` / `@cache` on a method (instance leak via `self`)
 - [x] **LRU002** — `@lru_cache(maxsize=None)` or `@cache` (no size limit)
-- [ ] **LRU003** — `@lru_cache` defined inside a function or closure (a new cache per call, no real hits)
+- [x] **LRU003** — `@lru_cache` defined inside a function or closure (a new cache per call, no real hits)
 - [ ] **LRU004** — Wrong decorator order with `@staticmethod`. `@lru_cache` must be the inner decorator and `@staticmethod` must be the outer one. The reverse breaks on Python 3.9 and is non canonical on later versions.
 
 ## Features
@@ -27,8 +27,8 @@
 ## Documentation
 
 - [ ] Per-rule docs pages with stable URLs (e.g. `https://lrucheck.dev/rules/LRU001`). Include the link in each error line so users can click from the terminal to read why the rule fires and how to fix it. Use MkDocs or a small Astro site on GitHub Pages.
-- [ ] `CHANGELOG.md` in [Keep a Changelog](https://keepachangelog.com/) format. One entry per release with Added / Changed / Fixed sections.
-- [ ] `CONTRIBUTING.md` with how to run tests, code style, how to propose a new rule, and the PR review flow.
+- [x] `CHANGELOG.md` in [Keep a Changelog](https://keepachangelog.com/) format. One entry per release with Added / Changed / Fixed sections.
+- [x] `CONTRIBUTING.md` with how to run tests, code style, how to propose a new rule, and the PR review flow.
 - [ ] Issue and pull request templates in `.github/ISSUE_TEMPLATE/` and `.github/PULL_REQUEST_TEMPLATE.md`. Templates for bug report, rule proposal, and feature request.
 
 ## Release

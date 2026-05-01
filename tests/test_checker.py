@@ -50,3 +50,16 @@ def test_unbounded_patterns_report_lru001_and_lru002_at_each_decorator_line():
         (24, "LRU002"),
         (29, "LRU002"),
     ]
+
+
+def test_lru003_fires_for_cache_decorators_inside_a_function():
+    errors, expected_path = errors_in("lru003_patterns.py")
+
+    assert all(error.path == expected_path for error in errors)
+    assert [(error.line, error.rule.code) for error in errors] == [
+        (5, "LRU003"),
+        (13, "LRU002"),
+        (13, "LRU003"),
+        (21, "LRU003"),
+        (30, "LRU003"),
+    ]
