@@ -1,4 +1,15 @@
+<p align="center">
+  <img src="assets/logo.png" alt="lrucheck logo" width="320">
+</p>
+
 # lrucheck
+
+[![PyPI](https://img.shields.io/pypi/v/lrucheck.svg)](https://pypi.org/project/lrucheck/)
+[![Python versions](https://img.shields.io/pypi/pyversions/lrucheck.svg)](https://pypi.org/project/lrucheck/)
+[![Downloads](https://static.pepy.tech/badge/lrucheck)](https://pepy.tech/project/lrucheck)
+[![License: MIT](https://img.shields.io/pypi/l/lrucheck.svg)](https://github.com/Kadermiyanyedi/lrucheck/blob/main/LICENSE)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 A small static checker that finds memory leaks from `functools.lru_cache` and `functools.cache` in Python code.
 
