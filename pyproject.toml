@@ -1,6 +1,6 @@
 [project]
 name = "lrucheck"
-version = "0.1.0"
+version = "0.2.0"
 description = "Detect memory-leak patterns in Python's functools.lru_cache usage."
 readme = "README.md"
 requires-python = ">=3.9"
