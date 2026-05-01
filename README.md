@@ -85,6 +85,8 @@ The output format is the same as `flake8` and `ruff`, so editors and CI tools ca
 |------|---------------|
 | `LRU001` | `@lru_cache` or `@cache` on a method. The cache keeps `self`, so the instance is never freed. |
 | `LRU002` | `@lru_cache(maxsize=None)` or `@cache`. The cache has no size limit and can grow forever. |
+| `LRU003` | `@lru_cache` inside a function or closure. A new cache is made on every outer call, so cache hits are rare. (warning) |
+| `LRU004` | `@lru_cache` placed above `@staticmethod`. Wrong decorator order. The reverse breaks on Python 3.9 and is non canonical on later versions. (warning) |
 
 ### Bad
 
@@ -117,11 +119,20 @@ class Service:
         return load(key)
 ```
 
+## Severity
+
+Each rule has a level. **Errors** (`LRU001`, `LRU002`) point to real memory leaks and fail the build. **Warnings** (`LRU003`, `LRU004`) point to less serious problems and do not change the exit code on their own. Warnings still print to the output and start with the `warning:` prefix.
+
+```
+service.py:5:6: LRU001 ...                  (error)
+service.py:5:6: warning: LRU003 ...         (warning)
+```
+
 ## Exit codes
 
 | Code | Meaning |
 |------|---------|
-| `0` | No problems found. |
+| `0` | No errors found. Warnings may still be printed. |
 | `1` | One or more rule errors found. |
 | `2` | A path was missing, a file could not be read, or a file had a syntax error. |
 
@@ -133,8 +144,6 @@ A pre-commit hook is on the roadmap (see `TODO.md`). For now, you can run `lruch
 
 ## Roadmap
 
-- `LRU003` — `@lru_cache` defined inside a function or closure (a new cache per call)
-- `LRU004` — wrong decorator order with `@staticmethod` or `@classmethod`
 - Read config from `pyproject.toml` `[tool.lrucheck]`
 - `# noqa: LRU001` to skip a single line
 - `--select` and `--ignore` to turn rules on or off

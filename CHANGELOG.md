@@ -4,6 +4,15 @@ All notable changes to this project go here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project follows [Semantic Versioning](https://semver.org/).
 
+## [0.2.0]
+
+### Added
+
+* Rule LRU003 to find `@lru_cache` inside a function or closure. This is a warning.
+* Rule LRU004 to find `@lru_cache` placed above `@staticmethod`. This is a warning.
+* Severity levels for rules. Errors fail the build with exit code 1. Warnings only print and do not change the exit code on their own.
+* Output format: warnings start with the `warning:` prefix.
+
 ## [0.1.0] (April 30, 2026)
 
 ### Added
