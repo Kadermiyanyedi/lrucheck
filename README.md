@@ -18,7 +18,7 @@ A small static checker that finds memory leaks from `functools.lru_cache` and `f
 Python's `lru_cache` is easy to use, but it has two common traps:
 
 1. **`@lru_cache` on a method.** The cache holds the `self` argument. Your instance never gets garbage-collected. The longer the program runs, the more memory it uses.
-2. **`@lru_cache(maxsize=None)` or `@cache`.** The cache has no size limit. It grows forever as new arguments come in.
+2. **`@lru_cache(maxsize=None)`.** The cache has no size limit. It grows forever as new arguments come in. (`@cache` does the same thing but is fine when you want it on purpose, for example on a method of an `enum.Enum` subclass.)
 
 `lrucheck` reads your code (without running it) and prints a warning when it finds these patterns.
 
@@ -47,22 +47,17 @@ lrucheck src/
 Given this file `service.py`:
 
 ```python
-from functools import lru_cache, cache
+from functools import lru_cache
 
 
 class UserService:
-    @lru_cache(maxsize=128)
+    @lru_cache(maxsize=None)
     def find_user(self, user_id):
         return load_user(user_id)
 
-    @cache
+    @lru_cache(maxsize=128)
     def get_settings(self, user_id):
         return load_settings(user_id)
-
-
-@lru_cache
-def heavy_compute(value):
-    return value * value
 ```
 
 Run lrucheck:
@@ -70,9 +65,8 @@ Run lrucheck:
 ```bash
 $ lrucheck service.py
 service.py:5:6: LRU001 `@lru_cache` on a method keeps `self` in the cache and leaks the instance
+service.py:5:6: LRU002 `@lru_cache(maxsize=None)` has no size limit and can grow forever. Use `@cache` directly if this is on purpose.
 service.py:9:6: LRU001 `@lru_cache` on a method keeps `self` in the cache and leaks the instance
-service.py:9:6: LRU002 `@lru_cache(maxsize=None)` or `@cache` has no size limit and can grow forever
-service.py:14:2: LRU002 `@lru_cache(maxsize=None)` or `@cache` has no size limit and can grow forever
 $ echo $?
 1
 ```
@@ -84,7 +78,7 @@ The output format is the same as `flake8` and `ruff`, so editors and CI tools ca
 | Code | What it finds |
 |------|---------------|
 | `LRU001` | `@lru_cache` or `@cache` on a method. The cache keeps `self`, so the instance is never freed. |
-| `LRU002` | `@lru_cache(maxsize=None)` or `@cache`. The cache has no size limit and can grow forever. |
+| `LRU002` | `@lru_cache(maxsize=None)`. The cache has no size limit and can grow forever. `@cache` is not flagged because it is sometimes the right choice. |
 | `LRU003` | `@lru_cache` inside a function or closure. A new cache is made on every outer call, so cache hits are rare. (warning) |
 | `LRU004` | `@lru_cache` placed above `@staticmethod`. Wrong decorator order. The reverse breaks on Python 3.9 and is non canonical on later versions. (warning) |
 

@@ -39,7 +39,10 @@ LRU001 = Rule(
 
 LRU002 = Rule(
     code="LRU002",
-    message="`@lru_cache(maxsize=None)` or `@cache` has no size limit and can grow forever",
+    message=(
+        "`@lru_cache(maxsize=None)` has no size limit and can grow forever. "
+        "Use `@cache` directly if this is on purpose."
+    ),
 )
 
 LRU003 = Rule(

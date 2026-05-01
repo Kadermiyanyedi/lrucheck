@@ -35,7 +35,7 @@ def test_lru001_only_patterns_report_each_method_at_its_decorator_line():
     ]
 
 
-def test_unbounded_patterns_report_lru001_and_lru002_at_each_decorator_line():
+def test_unbounded_patterns_only_flag_explicit_maxsize_none():
     errors, expected_path = errors_in("unbounded_patterns.py")
 
     assert all(error.path == expected_path for error in errors)
@@ -43,12 +43,9 @@ def test_unbounded_patterns_report_lru001_and_lru002_at_each_decorator_line():
         (6, "LRU001"),
         (6, "LRU002"),
         (12, "LRU001"),
-        (12, "LRU002"),
         (18, "LRU001"),
-        (18, "LRU002"),
         (24, "LRU001"),
         (24, "LRU002"),
-        (29, "LRU002"),
     ]
 
 
@@ -58,7 +55,6 @@ def test_lru003_fires_for_cache_decorators_inside_a_function():
     assert all(error.path == expected_path for error in errors)
     assert [(error.line, error.rule.code) for error in errors] == [
         (5, "LRU003"),
-        (13, "LRU002"),
         (13, "LRU003"),
         (21, "LRU003"),
         (30, "LRU003"),

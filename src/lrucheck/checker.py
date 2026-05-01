@@ -117,10 +117,10 @@ class Checker(ast.NodeVisitor):
 
     def _is_unbounded(self, decorator: ast.expr, cache_name: str) -> bool:
         if cache_name == "cache":
-            return True
+            return False
 
         if not isinstance(decorator, ast.Call):
-            return True
+            return False
 
         for keyword in decorator.keywords:
             if keyword.arg == "maxsize":
@@ -129,7 +129,7 @@ class Checker(ast.NodeVisitor):
         if decorator.args:
             return self._is_none_literal(decorator.args[0])
 
-        return True
+        return False
 
     @staticmethod
     def _is_none_literal(node: ast.expr) -> bool:

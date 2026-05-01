@@ -18,7 +18,7 @@
 
 ## Rule changes
 
-- [ ] Rewrite LRU002: stop flagging plain `@cache`. Only flag `@lru_cache(maxsize=None)`. New message: "no size limit, the cache can grow forever and may cause a memory leak. If you want a cache with no limit on purpose, use `@cache` directly." Reason: `@cache` is fine in some cases — for example on a method of an `enum.Enum` subclass, where the set of instances is fixed and small.
+- [x] Rewrite LRU002: stop flagging plain `@cache`. Only flag `@lru_cache(maxsize=None)`. New message: "no size limit, the cache can grow forever and may cause a memory leak. If you want a cache with no limit on purpose, use `@cache` directly." Reason: `@cache` is fine in some cases — for example on a method of an `enum.Enum` subclass, where the set of instances is fixed and small.
 
 ## Testing
 

@@ -13,6 +13,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 * Severity levels for rules. Errors fail the build with exit code 1. Warnings only print and do not change the exit code on their own.
 * Output format: warnings start with the `warning:` prefix.
 
+### Changed
+
+* LRU002 now flags only `@lru_cache(maxsize=None)`. Plain `@cache` and bare `@lru_cache` are no longer flagged. `@cache` is sometimes the right choice (for example on a method of an `enum.Enum` subclass) and bare `@lru_cache` defaults to a bounded cache, not an unbounded one.
+* LRU002 message updated to point users to `@cache` when an unbounded cache is on purpose.
+
 ## [0.1.0] (April 30, 2026)
 
 ### Added
