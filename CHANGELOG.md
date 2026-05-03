@@ -4,6 +4,12 @@ All notable changes to this project go here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project follows [Semantic Versioning](https://semver.org/).
 
+## [0.3.0]
+
+### Added
+
+* Read config from `pyproject.toml` `[tool.lrucheck]`. The `ignore` key takes a list of rule codes and skips them everywhere.
+
 ## [0.2.0] (May 2, 2026)
 
 ### Added
@@ -29,5 +35,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 * Exit codes 0 for clean, 1 for rule errors, 2 for missing files or syntax errors.
 * README, MIT license, and PyPI metadata.
 
+[0.3.0]: https://github.com/Kadermiyanyedi/lrucheck/releases/tag/v0.3.0
 [0.2.0]: https://github.com/Kadermiyanyedi/lrucheck/releases/tag/v0.2.0
 [0.1.0]: https://github.com/Kadermiyanyedi/lrucheck/releases/tag/v0.1.0

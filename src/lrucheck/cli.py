@@ -7,6 +7,7 @@ from pathlib import Path
 
 from lrucheck import __version__
 from lrucheck.checker import check_source
+from lrucheck.config import ConfigError, load_config
 from lrucheck.rules import RuleError, Severity
 
 EXIT_OK = 0
@@ -17,6 +18,12 @@ EXIT_PARSE_ERROR = 2
 def main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
+
+    try:
+        config = load_config(Path.cwd())
+    except ConfigError as error:
+        print(f"lrucheck: {error}", file=sys.stderr)
+        return EXIT_PARSE_ERROR
 
     files, missing = _collect_files(args.paths)
     for path in missing:
@@ -46,6 +53,9 @@ def main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
             parse_failed = True
+
+    if config.ignore:
+        rule_errors = [e for e in rule_errors if e.rule.code not in config.ignore]
 
     rule_errors.sort(key=lambda e: (e.path, e.line, e.column, e.rule.code))
     for rule_error in rule_errors:

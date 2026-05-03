@@ -122,6 +122,23 @@ service.py:5:6: LRU001 ...                  (error)
 service.py:5:6: warning: LRU003 ...         (warning)
 ```
 
+## Config
+
+You can put options in your `pyproject.toml` under `[tool.lrucheck]`.
+
+```toml
+[tool.lrucheck]
+ignore = ["LRU003", "LRU004"]
+```
+
+`lrucheck` walks up from the working directory to find the closest `pyproject.toml`. If it finds one, it reads the `[tool.lrucheck]` table. If the file is missing or the table is empty, the default config is used.
+
+| Key | Type | Meaning |
+|-----|------|---------|
+| `ignore` | list of rule codes | Skip these rules everywhere. Codes are case insensitive. |
+
+A malformed config or an unknown key causes `lrucheck` to exit with code 2 and print the problem to stderr.
+
 ## Exit codes
 
 | Code | Meaning |

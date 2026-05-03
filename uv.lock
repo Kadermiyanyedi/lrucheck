@@ -145,6 +145,9 @@ wheels = [
 name = "lrucheck"
 version = "0.2.0"
 source = { editable = "." }
+dependencies = [
+    { name = "tomli", marker = "python_full_version < '3.11'" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -154,10 +157,12 @@ dev = [
     { name = "pytest", version = "8.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "pytest", version = "9.0.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "ruff" },
+    { name = "tomli" },
     { name = "ty" },
 ]
 
 [package.metadata]
+requires-dist = [{ name = "tomli", marker = "python_full_version < '3.11'", specifier = ">=1.1.0" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -165,6 +170,7 @@ dev = [
     { name = "pre-commit", specifier = ">=3" },
     { name = "pytest", specifier = ">=8" },
     { name = "ruff", specifier = ">=0.5" },
+    { name = "tomli", specifier = ">=1.1.0" },
     { name = "ty" },
 ]
 

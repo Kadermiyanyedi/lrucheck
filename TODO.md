@@ -9,7 +9,7 @@
 
 ## Features
 
-- [ ] Read config from `pyproject.toml` `[tool.lrucheck]`
+- [x] Read config from `pyproject.toml` `[tool.lrucheck]`
 - [ ] Inline suppression with `# noqa: LRU001`
 - [ ] `--select` / `--ignore` flags to enable or disable rules
 - [ ] `--exclude` flag to skip paths

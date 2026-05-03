@@ -115,6 +115,35 @@ def test_warning_only_file_returns_zero_and_prints_warning_prefix(write_py, caps
     assert "warning: LRU003" in captured.out
 
 
+def test_ignore_in_pyproject_filters_matching_rules(write_py, tmp_path, monkeypatch, capsys):
+    target = write_py("leaky.py", LEAKY_SOURCE)
+    pyproject = tmp_path / "pyproject.toml"
+    pyproject.write_text('[tool.lrucheck]\nignore = ["LRU002"]\n', encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    exit_code = main([str(target)])
+    captured = capsys.readouterr()
+
+    assert exit_code == 1
+    assert "LRU001" in captured.out
+    assert "LRU002" not in captured.out
+
+
+def test_malformed_pyproject_returns_two_and_logs_to_stderr(
+    write_py, tmp_path, monkeypatch, capsys
+):
+    target = write_py("clean.py", CLEAN_SOURCE)
+    pyproject = tmp_path / "pyproject.toml"
+    pyproject.write_text("[tool.lrucheck]\nbogus = true\n", encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    exit_code = main([str(target)])
+    captured = capsys.readouterr()
+
+    assert exit_code == 2
+    assert "unknown key" in captured.err
+
+
 def test_version_flag_prints_version_and_exits_zero(capsys):
     with pytest.raises(SystemExit) as exc_info:
         main(["--version"])

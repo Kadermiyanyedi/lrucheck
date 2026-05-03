@@ -4,7 +4,9 @@ version = "0.2.0"
 description = "Detect memory-leak patterns in Python's functools.lru_cache usage."
 readme = "README.md"
 requires-python = ">=3.9"
-dependencies = []
+dependencies = [
+    'tomli >= 1.1.0; python_version < "3.11"',
+]
 authors = [
     { name = "Kadermiyanyedi" },
 ]
@@ -73,4 +75,5 @@ dev = [
     "pre-commit>=3",
     "ty",
     "codespell>=2",
+    "tomli>=1.1.0",
 ]
