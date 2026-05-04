@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 from collections.abc import Iterable
 
+from lrucheck.noqa import is_suppressed, parse_noqa
 from lrucheck.rules import LRU001, LRU002, LRU003, LRU004, RuleError
 
 CACHE_NAMES = frozenset({"lru_cache", "cache"})
@@ -144,4 +145,13 @@ def check_source(source: str, path: str) -> list[RuleError]:
     tree = ast.parse(source, filename=path)
     checker = Checker(path)
     checker.visit(tree)
-    return checker.rule_errors
+    if not checker.rule_errors:
+        return []
+    noqa_map = parse_noqa(source)
+    if not noqa_map:
+        return checker.rule_errors
+    return [
+        error
+        for error in checker.rule_errors
+        if not is_suppressed(error.line, error.rule.code, noqa_map)
+    ]

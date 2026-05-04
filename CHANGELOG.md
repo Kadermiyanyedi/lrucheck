@@ -9,6 +9,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ### Added
 
 * Read config from `pyproject.toml` `[tool.lrucheck]`. The `ignore` key takes a list of rule codes and skips them everywhere.
+* Inline suppression with `# noqa` comments. Use `# noqa` to skip every rule on a line, or `# noqa: LRU001` to skip a single code. The marker is case insensitive.
 
 ## [0.2.0] (May 2, 2026)
 

@@ -122,6 +122,25 @@ service.py:5:6: LRU001 ...                  (error)
 service.py:5:6: warning: LRU003 ...         (warning)
 ```
 
+## Suppress a single line
+
+Add a `# noqa` comment to skip rules on the line where the comment lives. The comment goes on the decorator line, because that is where `lrucheck` reports the error.
+
+```python
+class UserService:
+    @lru_cache(maxsize=None)  # noqa: LRU001, LRU002
+    def find_user(self, user_id):
+        return load_user(user_id)
+```
+
+| Form | Effect |
+|------|--------|
+| `# noqa` | Skip every rule on this line. |
+| `# noqa: LRU001` | Skip only `LRU001` on this line. |
+| `# noqa: LRU001, LRU002` | Skip both codes on this line. |
+
+The marker is case insensitive, so `# NOQA: lru001` also works.
+
 ## Config
 
 You can put options in your `pyproject.toml` under `[tool.lrucheck]`.
