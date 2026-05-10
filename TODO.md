@@ -11,7 +11,7 @@
 
 - [x] Read config from `pyproject.toml` `[tool.lrucheck]`
 - [x] Inline suppression with `# noqa: LRU001`
-- [ ] `--select` / `--ignore` flags to enable or disable rules
+- [x] `--select` / `--ignore` flags to enable or disable rules
 - [ ] `--exclude` flag to skip paths
 - [ ] JSON output mode for editor integrations
 - [ ] Provide `.pre-commit-hooks.yaml` so other projects can use lrucheck as a pre-commit hook

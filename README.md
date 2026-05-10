@@ -141,6 +141,22 @@ class UserService:
 
 The marker is case insensitive, so `# NOQA: lru001` also works.
 
+## Filter rules on the command line
+
+Two flags let you pick which rules run on each invocation.
+
+```bash
+lrucheck --ignore LRU003,LRU004 src/
+lrucheck --select LRU001 src/
+```
+
+| Flag | Effect |
+|------|--------|
+| `--ignore CODES` | Skip these rule codes. Adds to any `ignore` set in `pyproject.toml`. |
+| `--select CODES` | Run only these rule codes. Overrides the default 'all'. |
+
+Codes are comma separated and case insensitive. When you pass both flags, `--ignore` wins over `--select` for any overlap.
+
 ## Config
 
 You can put options in your `pyproject.toml` under `[tool.lrucheck]`.

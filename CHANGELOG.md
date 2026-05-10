@@ -10,6 +10,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 * Read config from `pyproject.toml` `[tool.lrucheck]`. The `ignore` key takes a list of rule codes and skips them everywhere.
 * Inline suppression with `# noqa` comments. Use `# noqa` to skip every rule on a line, or `# noqa: LRU001` to skip a single code. The marker is case insensitive.
+* `--select` and `--ignore` CLI flags to filter rules on each invocation. Codes are comma separated and case insensitive. `--ignore` adds to any `ignore` set in `pyproject.toml`. When both flags are present, `--ignore` wins over `--select` for any overlap.
 
 ## [0.2.0] (May 2, 2026)
 

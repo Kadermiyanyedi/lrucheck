@@ -115,6 +115,62 @@ def test_warning_only_file_returns_zero_and_prints_warning_prefix(write_py, caps
     assert "warning: LRU003" in captured.out
 
 
+def test_ignore_flag_filters_matching_rules(write_py, capsys):
+    target = write_py("leaky.py", LEAKY_SOURCE)
+
+    exit_code = main(["--ignore", "LRU002", str(target)])
+    captured = capsys.readouterr()
+
+    assert exit_code == 1
+    assert "LRU001" in captured.out
+    assert "LRU002" not in captured.out
+
+
+def test_ignore_flag_accepts_multiple_codes_in_one_argument(write_py, capsys):
+    target = write_py("leaky.py", LEAKY_SOURCE)
+
+    exit_code = main(["--ignore", "LRU001,LRU002", str(target)])
+    captured = capsys.readouterr()
+
+    assert exit_code == 0
+    assert captured.out == ""
+
+
+def test_select_flag_keeps_only_listed_rules(write_py, capsys):
+    target = write_py("leaky.py", LEAKY_SOURCE)
+
+    exit_code = main(["--select", "LRU001", str(target)])
+    captured = capsys.readouterr()
+
+    assert exit_code == 1
+    assert "LRU001" in captured.out
+    assert "LRU002" not in captured.out
+
+
+def test_select_and_ignore_both_apply_with_ignore_winning(write_py, capsys):
+    target = write_py("leaky.py", LEAKY_SOURCE)
+
+    exit_code = main(["--select", "LRU001,LRU002", "--ignore", "LRU001", str(target)])
+    captured = capsys.readouterr()
+
+    assert exit_code == 1
+    assert "LRU001" not in captured.out
+    assert "LRU002" in captured.out
+
+
+def test_ignore_flag_is_added_to_pyproject_ignore(write_py, tmp_path, monkeypatch, capsys):
+    target = write_py("leaky.py", LEAKY_SOURCE)
+    pyproject = tmp_path / "pyproject.toml"
+    pyproject.write_text('[tool.lrucheck]\nignore = ["LRU001"]\n', encoding="utf-8")
+    monkeypatch.chdir(tmp_path)
+
+    exit_code = main(["--ignore", "LRU002", str(target)])
+    captured = capsys.readouterr()
+
+    assert exit_code == 0
+    assert captured.out == ""
+
+
 def test_ignore_in_pyproject_filters_matching_rules(write_py, tmp_path, monkeypatch, capsys):
     target = write_py("leaky.py", LEAKY_SOURCE)
     pyproject = tmp_path / "pyproject.toml"

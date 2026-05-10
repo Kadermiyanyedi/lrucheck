@@ -54,8 +54,14 @@ def main(argv: list[str] | None = None) -> int:
             )
             parse_failed = True
 
-    if config.ignore:
-        rule_errors = [e for e in rule_errors if e.rule.code not in config.ignore]
+    ignore = set(config.ignore) | set(args.ignore)
+    select = set(args.select) if args.select is not None else None
+    if select is not None or ignore:
+        rule_errors = [
+            error
+            for error in rule_errors
+            if (select is None or error.rule.code in select) and error.rule.code not in ignore
+        ]
 
     rule_errors.sort(key=lambda e: (e.path, e.line, e.column, e.rule.code))
     for rule_error in rule_errors:
@@ -80,11 +86,29 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Files or directories to scan.",
     )
     parser.add_argument(
+        "--select",
+        type=_parse_codes,
+        default=None,
+        metavar="CODES",
+        help="Run only these rule codes (comma separated). Overrides the default 'all'.",
+    )
+    parser.add_argument(
+        "--ignore",
+        type=_parse_codes,
+        default=[],
+        metavar="CODES",
+        help="Skip these rule codes (comma separated). Adds to any ignore set in pyproject.toml.",
+    )
+    parser.add_argument(
         "--version",
         action="version",
         version=f"%(prog)s {__version__}",
     )
     return parser
+
+
+def _parse_codes(value: str) -> list[str]:
+    return [code.strip().upper() for code in value.split(",") if code.strip()]
 
 
 def _collect_files(paths: Iterable[Path]) -> tuple[list[Path], list[Path]]:
